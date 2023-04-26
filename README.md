@@ -7,6 +7,15 @@ ESP32 emulator for LPT/parallel port printers
 Very rough, but works well enough™   
 Hardcoded SSID, PSK, target TCP socket settings. This would be very easy to fix, if required. 
 
+## Possible improvements
+Currently, one IRQ needs to be executed for each byte and the bits are read manually.  
+A `while (true)` reading from the pins and doing the handshaking might be better suited.  
+
+A FIFO-buffer should be implemented to buffer the data between the LPT and the TCP socket.  
+The buffers fill-level could/should be used to indicate the BUSY flag to the LPT host.  
+
+Maybe possible: The ESP32 has an I2S peripheral with a parallel input & DMA capability. This mode is meant to be used with 8-bit camera modules, but it might (maybe with a bit of external logic) be compatible with a parallel port. This would allow for very high speed data input into the ESP32. Needs investigation.
+
 ## Why?
 To capture data from historic/vintage machines without using actual printers.  
 The ESP32 will act as a LPT/IEEE1284 printer and send all received data over a raw TCP socket.  
